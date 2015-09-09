@@ -1,15 +1,14 @@
 rooms
-
-    settings
-        required:
-            1) name
-            2) private or public
-            3) password
-        later:
-            1) genre
-            2) amount
-            3) game mode (situational)
-            4) max players
+    subclass
+        settings
+            required:
+              + 1) name
+              + 2) private or public
+              + 3) password
+            later:
+              + 1) genre
+              + 2) amount
+              + 3) max players
 
     fields:
         1) list of players
