@@ -1,0 +1,73 @@
+rooms
+
+    settings
+        required:
+            1) name
+            2) private or public
+            3) password
+        later:
+            1) genre
+            2) amount
+            3) game mode (situational)
+            4) max players
+
+    fields:
+        1) list of players
+        2) game controller
+        3) song controller
+        4) chat
+    methods:
+        1) start chat
+
+    rooms display:
+        from the outside:
+            1) name
+            2) player quantity
+            3) current settings
+            4) songs played 9\10
+            5) host name
+        from the inside:
+            1) name
+            2) player quantity
+            3) current settings
+            4) songs played 9\10
+            5) host name
+            6) leaderboard (name, score)
+            7) mode interface
+            8) chat
+
+
+song controller (genre, amount, time)
+    methods:
+        public:
+            1) gets new song (cuts song if neccessary)
+            2) init (generate songs)
+
+game controller //control the current round
+    fields:
+        1) mode
+    methods:
+        1) init
+        2) change settings
+        3) start new game(song controller + while) :
+            while(...){
+                string s = get_new_song(...);
+                mode.handle_result(start_round(song));
+                --i;
+            }
+            show_final_results();
+
+
+
+round controller
+    fields:
+        1) mode
+        2) song
+    methods:
+        1) start round (song) //starts song
+        2) check answer (this called by chat)
+
+
+chat
+    methods:
+        1) check message();
