@@ -11,12 +11,15 @@ rooms
               + 3) max players
 
     fields:
-        1) list of players
-        2) game controller
-        3) song controller
-        4) chat
+      + 1) list of players
+      + 2) game controller
+      + 3) song controller
+      + 4) chat
     methods:
-        1) start chat
+      + 1) start chat
+      + 2) change settings
+        3) add new member
+        4) delete member
 
     rooms display:
         from the outside:
