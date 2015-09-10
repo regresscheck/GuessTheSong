@@ -24,9 +24,9 @@ RoomSettings.prototype.changeSettings = function(genre, player_amount, max_playe
 function Room(name, type, pass){
     this.player_list = [];
     this.cur_settings = new RoomSettings(name, type, pass);
-    this.room_gc = new gc.GameController();
-    this.room_sc = new sc.SongController();
-    this.room_chat = new chat.Chat();
+    //this.room_gc = new gc.GameController(); UNCOMMENT
+    //this.room_sc = new sc.SongController();
+    //this.room_chat = new chat.Chat();
 }
 //Room methods
 Room.prototype.startChat = function() {
@@ -48,3 +48,4 @@ Room.prototype.addNewMember = function(member){
     //add name in the list
 }
 
+module.exports.Room = Room;
