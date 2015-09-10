@@ -10,8 +10,7 @@ var room_controller = require(path.join(__base, 'source', 'room_controller.js'))
 /* GET home page. */
 
 router.get('/', function(req, res, next) {
-	console.log(room_controller.rooms)
-    res.render('lobby', { rooms:room_controller.getRoomList() });
+    res.render('lobby', { rooms:room_controller.rooms });
 });
 
 // NOT IMPLEMENTED

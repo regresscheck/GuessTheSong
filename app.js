@@ -4,9 +4,12 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var winston = require('winston')
 
 // path to the folder of the app
 global.__base = __dirname;
+winston.level = 'debug';
+
 
 var routes = require('./routes/index');
 var lobby = require('./routes/lobby');  
