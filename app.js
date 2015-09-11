@@ -4,7 +4,9 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var winston = require('winston')
+var winston = require('winston');
+var passport = require('passport');
+var VkontakteStrategy = require('passport-vkontakte');
 
 // path to the folder of the app
 global.__base = __dirname;
