@@ -16,3 +16,5 @@ function isLoggedIn(req, res, next) {
         return next();
     res.redirect('/');
 }
+
+module.exports = router;
