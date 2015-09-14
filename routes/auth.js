@@ -1,20 +1,25 @@
 var express = require('express');
 var router = express.Router();
 
-router.get('/google', function(req, res, next) {
-    passport.authenticate('google', { scope: ['profile', 'email'] });
-});
+//var passport = require('passport');
 
-router.get('/google/callback', function(req, res, next) {
-    passport.authenticate('google', {
-        successRedirect: '/profile',
-        failureRedirect: '/'});
-});
+module.exports = function(passport) {
+    router.get('/google', function (req, res, next) {
+        passport.authenticate('google', {scope: ['profile', 'email']});
+    });
 
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated())
-        return next();
-    res.redirect('/');
-}
+    router.get('/google/callback', function (req, res, next) {
+        passport.authenticate('google', {
+            successRedirect: '/profile',
+            failureRedirect: '/'
+        });
+    });
 
-module.exports = router;
+    function isLoggedIn(req, res, next) {
+        if (req.isAuthenticated())
+            return next();
+        res.redirect('/');
+    }
+    return router;
+};
+

@@ -11,6 +11,7 @@
     "debug": "~2.2.0",
     "enum": "^2.1.0",
     "express": "~4.13.3",
+    "express-session": "^1.11.3",
     "jade": "~1.11.0",
     "mongoose": "^4.1.6",
     "morgan": "~1.6.1",

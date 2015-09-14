@@ -6,16 +6,13 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var winston = require('winston');
 var passport = require('passport');
-var VkontakteStrategy = require('passport-vkontakte');
+var mongoose = require('mongoose');
+var configDB = require('./config/database');
+var session = require('express-session');
 
 // path to the folder of the app
 global.__base = __dirname;
 winston.level = 'debug';
-
-
-var routes = require('./routes/index');
-var lobby = require('./routes/lobby');
-var auth = require('./routes/auth')
 
 var app = express();
 
@@ -24,13 +21,25 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-// uncomment after placing your favicon in /public
+mongoose.connect(configDB.url);
+
+require('./config/passport')(passport);
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+    secret: 'literallyshittystringthatwillbeoursecret',
+    resave: false,
+    saveUninitialized: true}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+var routes = require('./routes/index');
+var lobby = require('./routes/lobby');
+var auth = require('./routes/auth')(passport);
 
 app.use('/', routes);
 app.use('/lobby', lobby);
