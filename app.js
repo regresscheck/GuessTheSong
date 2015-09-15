@@ -8,7 +8,6 @@ var winston = require('winston');
 var passport = require('passport');
 var mongoose = require('mongoose');
 var configDB = require('./config/database');
-var session = require('express-session');
 
 // path to the folder of the app
 global.__base = __dirname;
@@ -23,23 +22,19 @@ app.set('view engine', 'jade');
 
 mongoose.connect(configDB.url);
 
-require('./config/passport')(passport);
+require('./config/passport');
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({
-    secret: 'literallyshittystringthatwillbeoursecret',
-    resave: false,
-    saveUninitialized: true}));
 app.use(passport.initialize());
 app.use(passport.session());
 
 var routes = require('./routes/index');
 var lobby = require('./routes/lobby');
-var auth = require('./routes/auth')(passport);
+var auth = require('./routes/auth');
 
 app.use('/', routes);
 app.use('/lobby', lobby);
