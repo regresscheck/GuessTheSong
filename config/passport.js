@@ -12,6 +12,8 @@ passport.deserializeUser(function(obj, done) {
         done(err, user);
     });
 });
+
+// Google Auth
 passport.use(new GoogleStrategy({
         clientID: configAuth.googleAuth.clientID,
         clientSecret: configAuth.googleAuth.clientSecret,

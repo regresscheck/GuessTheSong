@@ -10,6 +10,7 @@ var mongoose = require('mongoose');
 var configDB = require('./config/database');
 
 // path to the folder of the app
+// should be removed I think
 global.__base = __dirname;
 winston.level = 'debug';
 
@@ -20,8 +21,11 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
+
+// db setup
 mongoose.connect(configDB.url);
 
+// app setup
 require('./config/passport');
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -32,6 +36,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 app.use(passport.session());
 
+
+// routes setup
 var routes = require('./routes/index');
 var lobby = require('./routes/lobby');
 var auth = require('./routes/auth');
@@ -39,6 +45,8 @@ var auth = require('./routes/auth');
 app.use('/', routes);
 app.use('/lobby', lobby);
 app.use('/auth', auth);
+
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     var err = new Error('Not Found');

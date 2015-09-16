@@ -9,14 +9,15 @@ var room_controller = require(path.join(__base, 'source', 'room_controller.js'))
 
 /* GET home page. */
 
-router.get('/', function(req, res, next) {
-    res.render('lobby', { rooms:room_controller.rooms });
+router.get('/', function (req, res) {
+    res.render('lobby', {rooms: room_controller.rooms});
 });
 
-// NOT IMPLEMENTED
-router.get('/create', function(req, res, next) { 
-	room_controller.createRoom('a', 'b', 'c');
-	res.redirect('/lobby');	
+// NOT IMPLEMENTED, CHECK ARGS
+router.post('/create', function (req, res) {
+    console.log(req.body);
+    room_controller.createRoom(req.body.name, 'b', 'c');
+    res.redirect('/lobby');
 });
 
 module.exports = router;

@@ -1,6 +1,12 @@
 extends layout
 
 block content
-	ul
-		each room in rooms
-			li= room.cur_settings.room_name
+    ul
+        each room in rooms
+            li= room.cur_settings.room_name
+    form(name="create-room", method="post", action="/lobby/create/")
+        div.input
+            span.label Name
+            input(type="text", name="name")
+        div.actions
+            input(type="submit", value="Create")
