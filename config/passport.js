@@ -28,12 +28,14 @@ passport.use(new GoogleStrategy({
                     return done(null, user);
                 else {
                     models.User.create({
-                        profile_id: profile.id,
+                        social_type: 'google',
+                        social_id: profile.id,
                         token: accessToken,
                         name: profile.displayName,
-                        email: profile.emails[0].value
                     }).then(function(newUser) {
                         return done(null, newUser);
+                    }).catch(function(err) {
+                        return done(err);
                     });
                 }
             }).catch(function (err) {
