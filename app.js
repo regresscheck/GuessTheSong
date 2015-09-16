@@ -6,8 +6,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var winston = require('winston');
 var passport = require('passport');
-var mongoose = require('mongoose');
-var configDB = require('./config/database');
 
 // path to the folder of the app
 // should be removed I think
@@ -21,9 +19,6 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-
-// db setup
-mongoose.connect(configDB.url);
 
 // app setup
 require('./config/passport');

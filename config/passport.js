@@ -2,14 +2,16 @@ var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var configAuth = require('./auth');
 var passport = require('passport');
 
-var User = require('../models/user');
+var models = require('../models');
 
 passport.serializeUser(function(user, done) {
-    done(null, user.id);
+    return done(null, user.id);
 });
 passport.deserializeUser(function(obj, done) {
-    User.findById(id, function(err, user) {
-        done(err, user);
+    User.findById(id).then(function(user) {
+        return done(null, user);
+    }).catch(function(err) {
+        return done(err);
     });
 });
 
@@ -21,24 +23,21 @@ passport.use(new GoogleStrategy({
     },
     function(accessToken, refreshToken, profile, done) {
         process.nextTick(function() {
-            User.findOne({'google.id': profile.id}, function(err, user) {
-                if (err)
-                    return done(err);
+            models.User.findOne({'profile_id': profile.id}).then(function(user) {
                 if (user)
                     return done(null, user);
                 else {
-                    var newUser = new User();
-                    newUser.google.id = profile.id;
-                    newUser.google.token = accessToken;
-                    newUser.google.name = profile.displayName;
-                    newUser.google.email = profile.emails[0].value;
-
-                    newUser.save(function(err) {
-                        if (err)
-                            throw err;
+                    models.User.create({
+                        profile_id: profile.id,
+                        token: accessToken,
+                        name: profile.displayName,
+                        email: profile.emails[0].value
+                    }).then(function(newUser) {
                         return done(null, newUser);
                     });
                 }
+            }).catch(function (err) {
+                return done(err);
             });
         });
     }
