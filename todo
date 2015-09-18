@@ -22,7 +22,8 @@ rooms
       + 2) change settings
         3) add new member
         4) delete member
-
+	if(last user disconnected)
+		destroy();  
     rooms display:
         from the outside:
             1) name
@@ -60,7 +61,6 @@ game controller //control the current round
                 --i;
             }
             show_final_results();
-
 
 
 round controller

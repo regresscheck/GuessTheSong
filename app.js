@@ -13,6 +13,12 @@ global.__base = __dirname;
 winston.level = 'debug';
 
 var app = express();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
+
+server.listen(80);
+
+require('./source/socket')(io);
 
 
 // view engine setupgg
