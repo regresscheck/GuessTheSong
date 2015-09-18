@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var winston = require('winston');
 var passport = require('passport');
+var session = require('express-session');
 
 // path to the folder of the app
 // should be removed I think
@@ -34,6 +35,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+    secret:'secret',
+    resave: true,
+    saveUninitialized: true}));
 app.use(passport.initialize());
 app.use(passport.session());
 
