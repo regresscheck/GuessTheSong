@@ -1,9 +1,0 @@
-extends layout
-
-block scripts
-    script(src="/socket.io/socket.io.js")
-block content
-    form(name="send_message", method="POST", action="#")
-        div.input
-            input(type="text", name="message", id="message", autofocus="autofocus", placeholder="Message")
-            input(type="submit", value="Send")
