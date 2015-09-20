@@ -1,9 +1,19 @@
 extends layout
 
 block content
-    ul
-        each room in rooms
-            li= room.cur_settings.room_name
+    table
+        thead
+            th Id
+            th Name
+            th Link
+
+        tbody
+            each room in rooms
+                tr
+                    th= room.id
+                    th= room.settings.room_name
+                    th
+                        a(href="/game/#{room.id}") Go
     form(name="create-room", method="post", action="/lobby/create/")
         div.input
             span.label Name

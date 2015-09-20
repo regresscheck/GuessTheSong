@@ -21,9 +21,10 @@ RoomSettings.prototype.changeSettings = function(genre, player_amount, max_playe
     this.player_amount = player_amount;
     this.max_players = max_players;
 };
-function Room(name, type, pass){
+function Room(id, name, type, pass){
+    this.id = id;
     this.player_list = [];
-    this.cur_settings = new RoomSettings(name, type, pass);
+    this.settings = new RoomSettings(name, type, pass);
     //this.room_gc = new gc.GameController(); UNCOMMENT
     //this.room_sc = new sc.SongController();
     //this.room_chat = new chat.Chat();
@@ -31,21 +32,20 @@ function Room(name, type, pass){
 //Room methods
 Room.prototype.startChat = function() {
     //..starts chat
-}
+};
 
 Room.prototype.changeSettings = function(genre, player_amount, max_players){
-    this.cur_settings.changeSettings(genre, player_amount, max_players);
-}
+    this.settings.changeSettings(genre, player_amount, max_players);
+};
 
-Room.prototype.deleteMember = function(member){
-    this.cur_settings.player_amount--;
-    //todo
-    //find name and delete
-}
-Room.prototype.addNewMember = function(member){
-    this.cur_settings.player_amount++;
-    //todo
-    //add name in the list
-}
+Room.prototype.removeUser = function(user){
+    this.settings.player_amount--;
+    var i = player_list.indexOf(user);
+    player_list.splice(i, 1);
+};
+Room.prototype.addUser = function(user){
+    this.settings.player_amount++;
+    this.player_list.push(user);
+};
 
 module.exports.Room = Room;

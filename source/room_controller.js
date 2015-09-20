@@ -7,8 +7,8 @@ function RoomController() {
 
 RoomController.prototype.createRoom = function(name, type, pass) {
 	winston.info('Creating new room');
-	this.rooms.push(new rm.Room(name, type, pass));
-	return this.rooms.length;
+	this.rooms.push(new rm.Room(this.rooms.length, name, type, pass));
+	return this.rooms.length - 1;
 }
 
 RoomController.prototype.getRoom = function(id) {

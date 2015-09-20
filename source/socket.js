@@ -1,5 +1,4 @@
 
-
 module.exports = function(io) {
     var allClients = [];
     io.on('connection', function (socket) {

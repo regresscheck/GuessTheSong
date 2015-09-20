@@ -47,10 +47,12 @@ app.use(passport.session());
 var routes = require('./routes/index');
 var lobby = require('./routes/lobby');
 var auth = require('./routes/auth');
+var room = require('./routes/game');
 
 app.use('/', routes);
 app.use('/lobby', lobby);
 app.use('/auth', auth);
+app.use('/game', room);
 
 
 // catch 404 and forward to error handler
