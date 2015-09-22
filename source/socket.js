@@ -1,3 +1,7 @@
+var escape = require('escape-html');
+var roomIdToString = require('./misc').roomIdToString;
+
+
 module.exports = function(io) {
     var allClients = [];
     io.on('connection', function (socket) {
@@ -7,12 +11,12 @@ module.exports = function(io) {
             allClients.splice(i, 1);
         });
         socket.on('join_room', function(data) {
-            console.log('join_room:');
-            console.log(data);
+            socket.join(roomIdToString(data.room_id));
         });
         socket.on('message', function(data) {
-            console.log('message:');
-            console.log(data);
+            io.to(roomIdToString(data.room_id)).emit('message', {
+                message: escape(data.message)
+            });
         });
     });
 };

@@ -3,6 +3,9 @@ $(document).ready(function(){
     socket.on('connect', function() {
         socket.emit("join_room", {room_id: room_id});
     });
+    socket.on('message', function(data) {
+        $('#chat').prepend(data.message + '\n');
+    });
 
 });
 

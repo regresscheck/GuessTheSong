@@ -1,0 +1,9 @@
+module.exports.roomIdToString = function(id) {
+    return 'r' + id.toString();
+};
+
+module.exports.isLoggedIn = function(req, res, next) {
+    if (req.isAuthenticated())
+        return next();
+    res.redirect('/');
+};
