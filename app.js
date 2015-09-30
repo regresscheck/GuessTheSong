@@ -7,6 +7,9 @@ var bodyParser = require('body-parser');
 var winston = require('winston');
 var passport = require('passport');
 var session = require('express-session');
+var generalSettings = require('./config/general');
+var sequelize = require('./models').sequelize;
+var SessionStore = require('connect-session-sequelize')(session.Store);
 
 // path to the folder of the app
 // should be removed I think
@@ -28,15 +31,19 @@ app.set('view engine', 'jade');
 // app setup
 require('./config/passport');
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
-    secret: 'makesessionnotwar',
+    secret: generalSettings.sessionSecret,
     resave: true,
-    saveUninitialized: true}));
+    saveUninitialized: true,
+    store: new SessionStore({
+        db: sequelize
+    })
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -66,6 +73,9 @@ app.use(function (req, res, next) {
 // will print stacktrace
 if (app.get('env') === 'development') {
     app.use(function (err, req, res, next) {
+        console.log('------------');
+        console.log(err.message);
+        console.log('------------');
         res.status(err.status || 500);
         res.render('error', {
             message: err.message,
@@ -85,5 +95,4 @@ app.use(function (err, req, res, next) {
 });
 
 server.listen(3000);
-
 module.exports = app;

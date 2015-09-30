@@ -4,9 +4,7 @@ module.exports = function(sequelize, DataTypes) {
             social_type: DataTypes.STRING,
             social_id: DataTypes.STRING,
             token: DataTypes.STRING,
-            name: DataTypes.STRING,
-        }, {
-            timestamps: false
+            name: DataTypes.STRING
         }
     );
     return User;
