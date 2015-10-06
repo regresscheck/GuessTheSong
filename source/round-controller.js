@@ -28,7 +28,10 @@ RoundController.prototype.start = function(next) {
 };
 
 RoundController.prototype.handleMessage = function(user, data) {
-    this.gameModeController.handleMessage(this.song, user, data);
+    var self = this;
+    this.gameModeController.handleMessage({
+        endRound: self.endNow
+    },this.song, user, data);
 };
 
 module.exports = RoundController;

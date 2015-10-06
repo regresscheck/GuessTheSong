@@ -1,5 +1,7 @@
 // Methods that must be provided by Game Mode:
-// 1) handleMessage(song, user, data), returns "result" object
-// 2) handleResult(score), accumulates "result" objects
+//   handleMessage(functions, song, user, data), returns "result" object
+// Functions is a map of all available functions:
+// 1) endRound - ends round before timer.
+
 
 module.exports.ClassicMode =  require('./classic-mode');
