@@ -9,7 +9,11 @@ var passport = require('passport');
 var session = require('express-session');
 var generalSettings = require('./config/general');
 var sequelize = require('./models').sequelize;
-var SessionStore = require('connect-session-sequelize')(session.Store);
+var sessionStore = require('./source/session-store');
+
+
+// Initializes Event Emitters
+require('./source/chat-controller');
 
 // path to the folder of the app
 // should be removed I think
@@ -40,9 +44,7 @@ app.use(session({
     secret: generalSettings.sessionSecret,
     resave: true,
     saveUninitialized: true,
-    store: new SessionStore({
-        db: sequelize
-    })
+    store: sessionStore
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -96,3 +98,4 @@ app.use(function (err, req, res, next) {
 
 server.listen(3000);
 module.exports = app;
+

@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var room_controller = require('./../source/room_controller');
+var room_controller = require('./../source/room-controller');
 var isLoggedIn = require('./../source/misc').isLoggedIn;
 
 /* GET home page. */

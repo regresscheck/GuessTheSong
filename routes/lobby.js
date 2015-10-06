@@ -1,16 +1,16 @@
 var express = require('express');
 var router = express.Router();
 
-var room_controller = require('./../source/room_controller');
+var roomController = require('./../source/room-controller');
 
 
 router.get('/', function (req, res) {
-    res.render('lobby', {rooms: room_controller.rooms});
+    res.render('lobby', {rooms: roomController.rooms});
 });
 
 router.post('/create', function (req, res) {
     console.log(req.body);
-    room_controller.createRoom(req.body.name, 'b', 'c');
+    roomController.createRoom(req.body.name, 'b', 'c');
     res.redirect('/lobby');
 });
 

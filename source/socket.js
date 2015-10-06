@@ -1,11 +1,12 @@
-var escape = require('escape-html');
 var roomIdToString = require('./misc').roomIdToString;
 var passportSocketIo = require('passport.socketio');
 var generalSettings = require('./../config/general');
-var session = require('express-session');
-var sequelize = require('./../models').sequelize;
-var SessionStore = require('connect-session-sequelize')(session.Store);
+var sessionStore = require('./session-store');
+var emitters = require('./emitters');
 
+
+
+// NEED TO CONTROL SOCKETS PROPERLY
 module.exports = function(io) {
     var allClients = [];
 
@@ -18,27 +19,37 @@ module.exports = function(io) {
             accept(new Error(message));
     }
 
+    function addSocket(socket) {
+        allClients.push(socket);
+        return allClients.size - 1;
+    }
+
     io.use(passportSocketIo.authorize({
         secret: generalSettings.sessionSecret,
-        store: new SessionStore({
-            db: sequelize
-        }),
+        store: sessionStore,
         success: onAuthorizeSuccess,
         fail: onAuthorizeFail
     }));
     io.on('connection', function (socket) {
-        allClients.push(socket);
+        var id = addSocket(socket);
         socket.on('disconnect', function () {
             var i = allClients.indexOf(socket);
             allClients.splice(i, 1);
         });
-        socket.on('join_room', function(data) {
-            socket.join(roomIdToString(data.room_id));
+        socket.on('joinRoom', function(data) {
+            socket.join(roomIdToString(data.roomId));
         });
         socket.on('message', function(data) {
-            io.to(roomIdToString(data.room_id)).emit('message', {
-                message: escape(data.message)
-            });
+            emitters.chatEmitter.emit('message', id, data);
         });
+        socket.on('startGame', function(data) {
+            emitters.chatEmitter.emit('startGame', id, data);
+        });
+    });
+    emitters.socketEmitter.on('sendToRoom', function(roomId, event, data) {
+        io.to(roomIdToString(roomId)).emit(event, data);
+    });
+    emitters.socketEmitter.on('sendToUser', function(socketId, event, data) {
+        allClients[socketId].emit(event, data);
     });
 };

@@ -11,7 +11,7 @@ block content
             each room in rooms
                 tr
                     th= room.id
-                    th= room.settings.room_name
+                    th= room.name
                     th
                         a(href="/game/#{room.id}") Go
     form(name="create-room", method="post", action="/lobby/create/")

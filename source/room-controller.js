@@ -1,4 +1,4 @@
-var rm = require('./room.js');
+var Room = require('./room.js');
 var winston = require('winston');
 
 function RoomController() {
@@ -7,12 +7,12 @@ function RoomController() {
 
 RoomController.prototype.createRoom = function(name, type, pass) {
 	winston.info('Creating new room');
-	this.rooms.push(new rm.Room(this.rooms.length, name, type, pass));
+	this.rooms.push(new Room(this.rooms.length, name, type, pass));
 	return this.rooms.length - 1;
-}
+};
 
 RoomController.prototype.getRoom = function(id) {
 	return this.rooms[id];
-}
+};
 
 module.exports = new RoomController();
