@@ -9,11 +9,11 @@ function GameController(roomId, controllers) {
     this.roomId = roomId;
     this.roundController = null;
     this.started = false;
-    this.songController = new SongController();
     this.songPlayer = controllers.songPlayer;
     this.controllers = controllers;
     this.roundDuration = 30;
     this.roundsCount = 10;
+    this.songController = new SongController(this.roundDuration);
     controllers.gameController = this;
     controllers.songController = this.songController;
     this.gameModeController = new GameModeControllers.ClassicMode(controllers);

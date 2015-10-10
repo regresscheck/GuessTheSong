@@ -25,7 +25,6 @@ $(document).ready(function(){
         var table = $('#score');
         table.empty();
         for (var i = 0; i < data.scores.length; i++) {
-            console.log(data.scores[i]);
             table.append('<tr><td>' + data.scores[i].player.name + '</td><td>' + data.scores[i].score.toString() + '</td></tr>');
         }
     });

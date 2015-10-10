@@ -66,7 +66,7 @@ module.exports = function(io) {
         io.to(roomIdToString(roomId)).emit(event, data);
     });
     emitters.socketEmitter.on('sendToPlayer', function(player, event, data) {
-        if (allClients[player.socketId] && allClients[player.scoketId].request.user.id === player.user.id)
+        if (allClients[player.socketId] && allClients[player.socketId].request.user.id === player.user.id)
             allClients[player.socketId].emit(event, data);
     });
 };

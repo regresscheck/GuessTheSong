@@ -40,3 +40,7 @@ module.exports.syncLoop = function(iterations, process, exit) {
     loop.next();
     return loop;
 };
+
+module.exports.getRandomInt = function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}

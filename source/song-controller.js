@@ -1,10 +1,11 @@
 // TODO: Add error handling for Sequelize
-// Обычный коммент
 
 var Song = require('./../models').Song;
+var getRandomInt = require('./misc').getRandomInt;
 
-function SongController() {
+function SongController(duration) {
     this.songs = [];
+    this.songDuration = duration;
 }
 
 SongController.prototype.init = function(songsCount, next) {
@@ -17,6 +18,10 @@ SongController.prototype.init = function(songsCount, next) {
             songs = songs.concat(songs.slice(0, songsCount - songs.length));
         }
         self.songs = songs;
+        self.songs.forEach(function(song) {
+            song.startTime = getRandomInt(0, song.duration - self.songDuration);
+            song.endTime = song.startTime + self.songDuration;
+        });
         next();
     });
 };
