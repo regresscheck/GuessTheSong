@@ -15,8 +15,6 @@ var sessionStore = require('./source/session-store');
 // Initializes Event Emitters
 require('./source/chat-controller');
 
-// path to the folder of the app
-// should be removed I think
 global.__base = __dirname;
 winston.level = 'debug';
 
@@ -55,11 +53,13 @@ var routes = require('./routes/index');
 var lobby = require('./routes/lobby');
 var auth = require('./routes/auth');
 var room = require('./routes/game');
+var play = require('./routes/play');
 
 app.use('/', routes);
 app.use('/lobby', lobby);
 app.use('/auth', auth);
 app.use('/game', room);
+app.use('/play', play);
 
 
 // catch 404 and forward to error handler

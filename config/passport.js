@@ -22,7 +22,7 @@ passport.use(new GoogleStrategy({
     },
     function(accessToken, refreshToken, profile, done) {
         process.nextTick(function() {
-            models.User.findOne({'profile_id': profile.id}).then(function(user) {
+            models.User.findOne({ where: {social_type: 'google', social_id: profile.id}}).then(function(user) {
                 if (user)
                     return done(null, user);
                 else {

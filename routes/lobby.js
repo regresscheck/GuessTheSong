@@ -9,7 +9,6 @@ router.get('/', function (req, res) {
 });
 
 router.post('/create', function (req, res) {
-    console.log(req.body);
     roomController.createRoom(req.body.name, 'b', 'c');
     res.redirect('/lobby');
 });

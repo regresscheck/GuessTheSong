@@ -3,12 +3,14 @@ var passportSocketIo = require('passport.socketio');
 var generalSettings = require('./../config/general');
 var sessionStore = require('./session-store');
 var emitters = require('./emitters');
-
+var PlayerController = require('./player-controller');
+var Set = require('collections/set');
 
 
 // NEED TO CONTROL SOCKETS PROPERLY
 module.exports = function(io) {
     var allClients = [];
+    var emptyIds = new Set();
 
     function onAuthorizeSuccess(data, accept) {
         accept();
@@ -20,8 +22,13 @@ module.exports = function(io) {
     }
 
     function addSocket(socket) {
-        allClients.push(socket);
-        return allClients.size - 1;
+        if (emptyIds.length === 0) {
+            allClients.push(socket);
+            return allClients.length - 1;
+        }
+        var emptyId = emptyIds.shift();
+        allClients[emptyId] = socket;
+        return emptyId;
     }
 
     io.use(passportSocketIo.authorize({
@@ -32,24 +39,34 @@ module.exports = function(io) {
     }));
     io.on('connection', function (socket) {
         var id = addSocket(socket);
+        var player = PlayerController.getPlayer(id, socket);
         socket.on('disconnect', function () {
             var i = allClients.indexOf(socket);
-            allClients.splice(i, 1);
+            allClients[i] = null;
+            if (player.roomId !== 'undefined') {
+                emitters.chatEmitter.emit('leftRoom', player, {
+                    roomId: player.roomId
+                })
+            }
         });
         socket.on('joinRoom', function(data) {
+            player.roomId = data.roomId;
             socket.join(roomIdToString(data.roomId));
+            emitters.chatEmitter.emit('joinRoom', player, data);
         });
         socket.on('message', function(data) {
-            emitters.chatEmitter.emit('message', id, data);
+            if (typeof data.message === 'string')
+                emitters.chatEmitter.emit('message', player, data);
         });
         socket.on('startGame', function(data) {
-            emitters.chatEmitter.emit('startGame', id, data);
+            emitters.chatEmitter.emit('startGame', player, data);
         });
     });
     emitters.socketEmitter.on('sendToRoom', function(roomId, event, data) {
         io.to(roomIdToString(roomId)).emit(event, data);
     });
-    emitters.socketEmitter.on('sendToUser', function(socketId, event, data) {
-        allClients[socketId].emit(event, data);
+    emitters.socketEmitter.on('sendToPlayer', function(player, event, data) {
+        if (allClients[player.socketId] && allClients[player.scoketId].request.user.id === player.user.id)
+            allClients[player.socketId].emit(event, data);
     });
 };

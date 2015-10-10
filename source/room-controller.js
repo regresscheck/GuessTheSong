@@ -15,4 +15,9 @@ RoomController.prototype.getRoom = function(id) {
 	return this.rooms[id];
 };
 
+RoomController.prototype.roomExists = function(id) {
+	var intId = Number(id);
+    return Number.isInteger(intId) && intId >= 0 && intId < this.rooms.length;
+};
+
 module.exports = new RoomController();

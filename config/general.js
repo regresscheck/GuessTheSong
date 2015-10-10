@@ -1,3 +1,4 @@
 module.exports = {
-    sessionSecret: 'hdfshksflkhfdjfgjdgj'
+    sessionSecret: 'hdfshksflkhfdjfgjdgj',
+    maximumAnswerLength: 70
 }
