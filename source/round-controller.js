@@ -43,4 +43,10 @@ RoundController.prototype.handleMessage = function(player, data) {
     this.gameModeController.handleMessage(this.song, player, data);
 };
 
+RoundController.prototype.destruct = function() {
+    if (this.timer) {
+        clearTimeout(this.timer);
+    }
+};
+
 module.exports = RoundController;

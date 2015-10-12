@@ -43,6 +43,7 @@ module.exports = function(io) {
         socket.on('disconnect', function () {
             var i = allClients.indexOf(socket);
             allClients[i] = null;
+            emptyIds.add(i);
             if (player.roomId !== 'undefined') {
                 emitters.chatEmitter.emit('leftRoom', player, {
                     roomId: player.roomId

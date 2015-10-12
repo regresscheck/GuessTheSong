@@ -5,12 +5,13 @@ var roomController = require('./../source/room-controller');
 
 
 router.get('/', function (req, res) {
-    res.render('lobby', {rooms: roomController.rooms});
+    res.render('lobby', {rooms: roomController.getRooms()});
 });
 
 router.post('/create', function (req, res) {
-    roomController.createRoom(req.body.name, 'b', 'c');
-    res.redirect('/lobby');
+    roomController.createRoom(req.body.name, 'b', 'c', function(roomId) {
+        res.redirect('/game/' + roomId);
+    });
 });
 
 module.exports = router;

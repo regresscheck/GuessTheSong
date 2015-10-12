@@ -9,11 +9,12 @@ block content
 
         tbody
             each room in rooms
-                tr
-                    th= room.id
-                    th= room.name
-                    th
-                        a(href="/game/#{room.id}") Go
+                if room
+                    tr
+                        th= room.id
+                        th= room.name
+                        th
+                            a(href="/game/#{room.id}") Go
     form(name="create-room", method="post", action="/lobby/create/")
         div.input
             span.label Name

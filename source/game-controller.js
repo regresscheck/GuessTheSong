@@ -5,8 +5,8 @@ var GameModeControllers = require('./../game_mode_controllers');
 var SongController = require('./song-controller');
 var escape = require('escape-html');
 
-function GameController(roomId, controllers) {
-    this.roomId = roomId;
+function GameController(room, controllers) {
+    this.room = room;
     this.roundController = null;
     this.started = false;
     this.songPlayer = controllers.songPlayer;
@@ -24,7 +24,7 @@ GameController.prototype.handleMessage = function(player, data) {
         this.roundController.handleMessage(player, data);
     }
     else {
-        chatController.sendToRoom(this.roomId, 'message', {
+        chatController.sendToRoom(this.room, 'message', {
             message: escape(player.user.name + ': ' + data.message)
         });
     }
@@ -34,7 +34,7 @@ GameController.prototype.onPlayerJoin = function(player) {
     if (this.roundController) {
         this.roundController.onPlayerJoin(player);
     } else {
-        chatController.sendToRoom(this.roomId, 'setScore', {
+        chatController.sendToRoom(this.room, 'setScore', {
             scores: this.controllers.room.getSendablePlayers()
         });
     }
@@ -44,7 +44,7 @@ GameController.prototype.onPlayerLeft = function(player) {
     if (this.roundController) {
         this.roundController.onPlayerLeft(player);
     } else {
-        chatController.sendToRoom(this.roomId, 'setScore', {
+        chatController.sendToRoom(this.room, 'setScore', {
             scores: this.controllers.room.getSendablePlayers()
         });
     }
@@ -57,7 +57,7 @@ GameController.prototype.startGame = function() {
     self.started = true;
     self.songController.init(self.roundsCount, function() {
         self.gameModeController.onNewGame();
-        syncLoop(self.roundsCount, function(loop) {
+        self.roundLoop = syncLoop(self.roundsCount, function(loop) {
             var song = self.songController.getNextSong();
             self.roundController = new RoundController(self.gameModeController, song, self.roundDuration);
             self.roundController.start(function() {
@@ -69,6 +69,16 @@ GameController.prototype.startGame = function() {
             self.started = false;
         });
     });
+};
+
+GameController.prototype.destruct = function() {
+    console.log('GameController destruction');
+    if (this.roundLoop) {
+        this.roundLoop.break();
+    }
+    if (this.roundController) {
+        this.roundController.destruct();
+    }
 };
 
 module.exports = GameController;

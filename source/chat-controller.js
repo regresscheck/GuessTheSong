@@ -1,5 +1,6 @@
 var emitters = require('./emitters');
 var roomController = require('./room-controller');
+var winston = require('winston');
 
 emitters.chatEmitter.on('message', function(player, data) {
     if (roomController.roomExists(data.roomId))
@@ -24,6 +25,10 @@ emitters.chatEmitter.on('leftRoom', function(player, data) {
 module.exports.sendToPlayer = function(player, event, data) {
     emitters.socketEmitter.emit('sendToPlayer', player, event, data);
 };
-module.exports.sendToRoom = function(roomId, event, data) {
-    emitters.socketEmitter.emit('sendToRoom', roomId, event, data);
+module.exports.sendToRoom = function(room, event, data) {
+    if (roomController.getRoom(room.id) != room) {
+        winston.warn('Bad attempt of sending to room:', room.id, event, data);
+        return;
+    }
+    emitters.socketEmitter.emit('sendToRoom', room.id, event, data);
 };
