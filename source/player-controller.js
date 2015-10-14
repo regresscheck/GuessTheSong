@@ -37,10 +37,6 @@ module.exports.getPlayer = function getPlayer(socketId, socket) {
         player.socketId = socketId;
         return player;
     }
-    if (players.keys().length > 0) {
-        console.log(players.keys()[0]);
-        console.log(equalUsers(players.keys()[0], socket.request.user));
-    }
     return new Player(socketId, socket);
 };
 

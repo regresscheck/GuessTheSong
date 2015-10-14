@@ -2,6 +2,7 @@ var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var configAuth = require('./auth');
 var passport = require('passport');
 var models = require('../models');
+var winston = require('winston');
 
 passport.serializeUser(function(user, done) {
     return done(null, user.id);
@@ -10,6 +11,7 @@ passport.deserializeUser(function(id, done) {
     models.User.findById(id).then(function(user) {
         return done(null, user);
     }).catch(function(err) {
+        winston.error('DB problems is deserializeUser of Passport');
         return done(err);
     });
 });
@@ -38,6 +40,7 @@ passport.use(new GoogleStrategy({
                     });
                 }
             }).catch(function (err) {
+                winston.error('GoogleStrategy problems');
                 return done(err);
             });
         });

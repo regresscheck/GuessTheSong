@@ -72,7 +72,6 @@ GameController.prototype.startGame = function() {
 };
 
 GameController.prototype.destruct = function() {
-    console.log('GameController destruction');
     if (this.roundLoop) {
         this.roundLoop.break();
     }

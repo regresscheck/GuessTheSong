@@ -1,6 +1,6 @@
 // TODO: Add error handling for Sequelize
 
-var Song = require('./../models').Song;
+var models = require('./../models');
 var getRandomInt = require('./misc').getRandomInt;
 
 function SongController(duration) {
@@ -10,7 +10,12 @@ function SongController(duration) {
 
 SongController.prototype.init = function(songsCount, next) {
     var self = this;
-    Song.findAll({limit: songsCount}).then(function(songs) {
+    models.Song.findAll({
+        limit: songsCount,
+        order: [
+            models.Sequelize.fn('RAND')
+        ]
+    }).then(function(songs) {
         while (2 * songs.length <= songsCount) {
             songs = songs.concat(songs);
         }
