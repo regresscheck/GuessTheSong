@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var fs = require('fs');
+var CachedFs = require('cachedfs');
+var fs = new CachedFs();
 var tocUtils = require('./../source/mp3-toc-utils');
 var roomController = require('./../source/room-controller');
 var winston = require('winston');
