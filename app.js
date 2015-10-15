@@ -8,7 +8,6 @@ var winston = require('winston');
 var passport = require('passport');
 var session = require('express-session');
 var generalSettings = require('./config/general');
-var sequelize = require('./models').sequelize;
 var sessionStore = require('./source/session-store');
 
 
@@ -44,6 +43,14 @@ app.use(session({
     saveUninitialized: true,
     store: sessionStore
 }));
+
+// check that Redis is running
+app.use(function(req, res, next) {
+    if (!req.session) {
+        return next(new Error('Session problems'));
+    }
+    next();
+});
 app.use(passport.initialize());
 app.use(passport.session());
 

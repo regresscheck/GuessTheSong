@@ -1,5 +1,7 @@
 $(document).ready(function(){
+    //noinspection JSUndeclaredVariable
     socket = io.connect('http://' + document.domain + ':' + location.port);
+    var audio = undefined;
     socket.on('connect', function() {
         socket.emit("joinRoom", {roomId: roomId});
     });
@@ -32,10 +34,14 @@ $(document).ready(function(){
 });
 
 function sendMessage() {
-    socket.emit("message", {
-        roomId: roomId,
-        message: $('#message').val()});
-    $('#message_form')[0].reset();
+    var message = $('#message').val();
+    if (message.length > 0) {
+        socket.emit("message", {
+            roomId: roomId,
+            message: message
+        });
+        $('#message_form')[0].reset();
+    }
     return false;
 }
 

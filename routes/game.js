@@ -5,8 +5,9 @@ var isLoggedIn = require('./../source/misc').isLoggedIn;
 
 /* GET home page. */
 router.get('/:id', isLoggedIn, function (req, res) {
-    if (roomController.roomExists(req.params.id))
-        res.render('game', {room: roomController.getRoom(req.params.id)});
+    var room = roomController.getRoom(req.params.id);
+    if (room)
+        res.render('game', {room: room});
     else
         res.status(404).send('Wrong room');
 });

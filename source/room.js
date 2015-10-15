@@ -4,16 +4,18 @@ var Set = require('collections/set');
 var Player = require('./player-controller').Player;
 var generalSettings = require('./../config/general');
 var roomController;
+var winston = require('winston');
 
 // Cyclic requirement
 setTimeout(function() {
     roomController = require('./room-controller');
 }, 1000);
 
-function Room(id, name, type, pass){
+function Room(id, ownerId, name, password){
     this.id = id;
     this.name = name;
-    this.type = type;
+    this.ownerId = ownerId;
+    this.password = password;
     this.players = new Set({}, Player.equal, Player.hash);
     this.songPlayer = new SongPlayer(this);
     this.gameController = new GameController(this, {
@@ -33,7 +35,7 @@ Room.prototype.startRemoveTimer = function() {
     this.removeTimer = setTimeout(function() {
         self.destruct();
     }, generalSettings.roomDeleteInactivityTime * 1000);
-}
+};
 
 Room.prototype.addPlayer = function(player) {
     this.players.add(player);
@@ -65,8 +67,9 @@ Room.prototype.getSendablePlayers = function() {
 };
 
 Room.prototype.destruct = function() {
+    winston.info('Deleting room', this.id);
     roomController.removeRoom(this.id);
     this.gameController.destruct();
-}
+};
 
 module.exports = Room;

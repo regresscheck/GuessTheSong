@@ -8,7 +8,7 @@ emitters.chatEmitter.on('message', function(player, data) {
 });
 
 emitters.chatEmitter.on('startGame', function(player, data) {
-    if (roomController.roomExists(data.roomId))
+    if (roomController.roomExists(data.roomId) && roomController.getRoom(data.roomId).ownerId === player.user.id)
         roomController.getRoom(data.roomId).gameController.startGame();
 });
 

@@ -31,12 +31,18 @@ module.exports = function(io) {
         return emptyId;
     }
 
+    // authorization through Passport.js
     io.use(passportSocketIo.authorize({
         secret: generalSettings.sessionSecret,
         store: sessionStore,
         success: onAuthorizeSuccess,
         fail: onAuthorizeFail
     }));
+    /*
+    io.use(function(socket, next) {
+        next(new Error('Wrong password'));
+    });*/
+
     io.on('connection', function (socket) {
         var id = addSocket(socket);
         var player = PlayerController.getPlayer(id, socket);

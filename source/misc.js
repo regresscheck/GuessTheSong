@@ -1,14 +1,25 @@
-module.exports.roomIdToString = function(id) {
-    return 'r' + id.toString();
-};
+var tocUtils = require('./mp3-toc-utils');
+var models = require('./../models');
 
-module.exports.isLoggedIn = function(req, res, next) {
+module.exports.generateAllTocs = generateAllTocs;
+module.exports.roomIdToString = roomIdToString;
+module.exports.isLoggedIn = isLoggedIn;
+module.exports.syncLoop = syncLoop;
+module.exports.getRandomInt = getRandomInt;
+module.exports.generateTocForSong = generateTocForSong;
+
+function roomIdToString(id) {
+    return 'r' + id.toString();
+}
+
+
+function isLoggedIn(req, res, next) {
     if (req.isAuthenticated())
         return next();
     res.redirect('/');
-};
+}
 
-module.exports.syncLoop = function(iterations, process, exit) {
+function syncLoop(iterations, process, exit) {
     var index = 0,
         done = false,
         shouldExit = false;
@@ -39,8 +50,27 @@ module.exports.syncLoop = function(iterations, process, exit) {
     };
     loop.next();
     return loop;
-};
+}
 
-module.exports.getRandomInt = function getRandomInt(min, max) {
+
+function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+
+
+function generateTocForSong(filename) {
+    var tocPath = filename.replace('.mp3', '.toc');
+    tocUtils.generate('./songs/' + filename, function(buffer) {
+        require("fs").writeFileSync('./toc/' + tocPath, buffer);
+    })
+}
+
+function generateAllTocs() {
+    models.Song.findAll().then(function(songs) {
+        songs.forEach(function(song) {
+            generateTocForSong(song.filename);
+            console.log(song.filename);
+        });
+    });
 }

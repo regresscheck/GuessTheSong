@@ -7,23 +7,25 @@ function RoomController() {
     this.emptyIds = new Set();
 }
 
-RoomController.prototype.createRoom = function(name, type, pass, callback) {
+RoomController.prototype.createRoom = function(ownerId, name, password, callback) {
 	winston.info('Creating new room');
 	if (this.emptyIds.length === 0) {
-        this.rooms.push(new Room(this.rooms.length, name, type, pass));
+        this.rooms.push(new Room(this.rooms.length, ownerId, name, password));
         return callback(this.rooms.length - 1);
     }
     var roomId = this.emptyIds.shift();
-    this.rooms[roomId] = new Room(roomId, name, type, pass);
+    this.rooms[roomId] = new Room(roomId, ownerId, name, password);
     return callback(roomId);
 };
 
 RoomController.prototype.removeRoom = function(roomId) {
     this.rooms[roomId] = null;
     this.emptyIds.add(roomId);
-}
+};
 
 RoomController.prototype.getRoom = function(id) {
+    if (!this.roomExists(id))
+        return null;
 	return this.rooms[id];
 };
 
@@ -35,6 +37,6 @@ RoomController.prototype.roomExists = function(id) {
 
 RoomController.prototype.getRooms = function() {
     return this.rooms;
-}
+};
 
 module.exports = new RoomController();

@@ -1,12 +1,11 @@
 var chatController = require('./../source/chat-controller');
 var Map = require('collections/map');
 var generalSettings = require('./../config/general');
-var natural = require('natural');
 var Player = require('./../source/player-controller').Player;
 var escape = require('escape-html');
 var threadPool = require('webworker-threads').createPool(5);
 threadPool.load(__dirname + '/classic-mode-thread.js');
-var escape = require('escape-html');
+var unidecode = require('unidecode');
 
 function ClassicMode(controllers) {
     this.scores = new Map({}, Player.equal, Player.hash);
@@ -82,14 +81,16 @@ ClassicMode.prototype.onPlayerLeft = function(player) {
 
 ClassicMode.prototype.handleMessage = function(song, player, data) {
     var self = this;
-    threadPool.any.eval('checkAnswer(' + generalSettings.maximumAnswerLength + ', "' + encodeURI(song.artist) + '", "' +
-        encodeURI(song.title) + '","' + encodeURI(data.message) + '")',
+    console.log(unidecode(data.message));
+    threadPool.any.eval('checkAnswer(' + generalSettings.maximumAnswerLength + ', "' + encodeURI(unidecode(song.artist)) + '", "' +
+        encodeURI(unidecode(song.title)) + '","' + encodeURI(unidecode(data.message)) + '")',
         function(err, resultString) {
             if (err) {
-                console.error('Error in worker:', err.toString());
+                console.error(err.toString(), '(THREAD)');
                 return;
             }
             var result = JSON.parse(resultString);
+            console.log(result);
             chatController.sendToRoom(self.controllers.room, 'message', {
                 message: escape(player.user.name + ': ' + data.message)
             });

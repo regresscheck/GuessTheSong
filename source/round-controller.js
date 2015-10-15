@@ -1,6 +1,3 @@
-var chatController = require('./chat-controller');
-
-
 function RoundController(gameModeController, song, duration) {
     this.song = song;
     this.duration = duration;
